@@ -5,6 +5,7 @@ export function useGetApi({url}) {
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(false);
 
+
     async function getApi(){
         try{
             setLoading(true);

@@ -73,7 +73,7 @@ export default function ProductTable() {
                                         {row.name}
                                     </Link>
                                 </StyledTableCell>
-                                <StyledTableCell align="center">{Math.floor(row.price)} đ</StyledTableCell>
+                                <StyledTableCell align="center">${Math.floor(row?.price)}</StyledTableCell>
                                 <StyledTableCell align="center">{row.product}</StyledTableCell>
                                 <StyledTableCell align="center">{row.color}</StyledTableCell>
                                 <StyledTableCell align="center">
