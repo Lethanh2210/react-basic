@@ -7,7 +7,12 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import {useEffect, useState} from "react";
+import {useGetApi} from "../../hooks/getApiHooks";
+import {Button} from "@mui/material";
+import { Link } from "react-router-dom";
+import LoadingScreen from "react-loading-screen";
+import {Image} from "react-bootstrap";
+
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -31,40 +36,56 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 
 
-export default function CustomizedTables() {
-    const [product, setProduct] = useState([])
+export default function ProductTable() {
+    const {data, loading} = useGetApi({url: 'http://localhost:5000/api/products?limit=10'})
 
 
-    useEffect(() => {
-        getProduct()
-    }, [])
+
 
     return (
-        <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 700 }} aria-label="customized table">
-                <TableHead>
-                    <TableRow>
-                        <StyledTableCell>Dessert (100g serving)</StyledTableCell>
-                        <StyledTableCell align="right">Calories</StyledTableCell>
-                        <StyledTableCell align="right">Fat&nbsp;(g)</StyledTableCell>
-                        <StyledTableCell align="right">Carbs&nbsp;(g)</StyledTableCell>
-                        <StyledTableCell align="right">Protein&nbsp;(g)</StyledTableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {data.map((row) => (
-                        <StyledTableRow key={row.name}>
-                            <StyledTableCell component="th" scope="row">
-                                {row.name}
-                            </StyledTableCell>
-                            <StyledTableCell align="right">{row.data}</StyledTableCell>
-                            <StyledTableCell align="right">{row.data}</StyledTableCell>
-                            <StyledTableCell align="right">{row.cardbs}</StyledTableCell>
-                            <StyledTableCell align="right">{row.protein}</StyledTableCell>
-                        </StyledTableRow>
-                    ))}
-                </TableBody>
-            </Table>
-        </TableContainer>
+        <div>
+            {loading &&
+                <LoadingScreen
+                    loading={true}
+                    bgColor="#f1f1f1"
+                    spinnerColor="#9ee5f8"
+                    textColor="#676767"
+                    text="Loading..."
+                />
+            }
+            <Button variant="contained" color="success">Add Product</Button>
+            <TableContainer component={Paper}>
+                <Table sx={{ minWidth: 700 }} aria-label="customized table">
+                    <TableHead>
+                        <TableRow>
+                            <StyledTableCell>Name</StyledTableCell>
+                            <StyledTableCell align="center">Price</StyledTableCell>
+                            <StyledTableCell align="center">Product</StyledTableCell>
+                            <StyledTableCell align="center">Color</StyledTableCell>
+                            <StyledTableCell align="center">Image</StyledTableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {data?.map((row) => (
+                            <StyledTableRow key={row.name}>
+                                <StyledTableCell component="th" scope="row">
+                                    <Link className="linkProduct" to={`/${row.id}`}>
+                                        {row.name}
+                                    </Link>
+                                </StyledTableCell>
+                                <StyledTableCell align="center">{Math.floor(row.price)} đ</StyledTableCell>
+                                <StyledTableCell align="center">{row.product}</StyledTableCell>
+                                <StyledTableCell align="center">{row.color}</StyledTableCell>
+                                <StyledTableCell align="center">
+                                    <Image src={row?.image} style={{width: "50px"}} />
+                                </StyledTableCell>
+                            </StyledTableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        </div>
+
+
     );
 }

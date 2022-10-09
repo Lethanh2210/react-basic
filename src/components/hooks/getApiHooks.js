@@ -1,7 +1,7 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import axios from "axios";
 
-function useGetApi({url}) {
+export function useGetApi({url}) {
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(false);
 
@@ -9,11 +9,22 @@ function useGetApi({url}) {
         try{
             setLoading(true);
             const res = await axios.get(url);
-            setData(res.data)
+            const productData = await res.data.data;
+            setData(productData)
+            setLoading(false)
         }catch (e){
-
+            console.log(e.message)
         }finally{
             setLoading(false);
         }
+    }
+
+    useEffect(() => {
+        getApi();
+    }, [])
+
+    return {
+        data,
+        loading
     }
 }

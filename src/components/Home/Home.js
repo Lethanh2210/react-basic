@@ -1,8 +1,12 @@
 import React from 'react';
+import ProductTable from "./ProductTable/ProductTable";
 
 function Home(props) {
     return (
-        <div>Đây là home ne</div>
+        <div>
+            <ProductTable/>
+
+        </div>
     );
 }
 
